@@ -1,0 +1,138 @@
+:root{
+  --maroon:#7a1c2f;
+  --maroon-dark:#59101f;
+  --card:#decfb5;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'Sora',system-ui,sans-serif;
+  background:#0a0505;
+  min-height:100svh;
+  display:flex;align-items:center;justify-content:center;
+  padding:8px;
+}
+canvas#confetti{position:fixed;inset:0;pointer-events:none;z-index:999;}
+
+.app{
+  width:100%;
+  max-width:calc(96svh * (3000 / 1688));
+  aspect-ratio:3000/1688;
+  position:relative;
+  border-radius:10px;
+  overflow:hidden;
+  box-shadow:0 40px 90px -30px rgba(0,0,0,0.7);
+}
+.pages{position:relative;width:100%;height:100%;}
+.page{
+  position:absolute;inset:0;
+  background-size:cover;
+  background-position:center;
+  opacity:0;pointer-events:none;
+  transition:opacity 0.35s ease;
+}
+.page.active{opacity:1;pointer-events:auto;}
+
+.page[data-page="1"]{background-image:url('img/pg01.jpg');}
+.page[data-page="2"]{background-image:url('img/pg02.jpg');}
+.page[data-page="3"]{background-image:url('img/pg03.jpg');}
+.page[data-page="4"]{background-image:url('img/pg04.jpg');}
+.page[data-page="5"]{background-image:url('img/pg05.jpg');}
+.page[data-page="6"]{background-image:url('img/pg06.jpg');}
+.page[data-page="7"]{background-image:url('img/pg07.jpg');}
+.page[data-page="8"]{background-image:url('img/pg08.jpg');}
+.page[data-page="9"]{background-image:url('img/pg09.jpg');}
+.page[data-page="10"]{background-image:url('img/pg10.jpg');}
+.page[data-page="11"]{background-image:url('img/pg11.jpg');}
+.page[data-page="12"]{background-image:url('img/pg12.jpg');}
+.page[data-page="13"]{background-image:url('img/pg13.jpg');}
+.page[data-page="14"]{background-image:url('img/pg14.jpg');}
+.page[data-page="15"]{background-image:url('img/pg15.jpg');}
+.page[data-page="16"]{background-image:url('img/pg16.jpg');}
+.page[data-page="17"]{background-image:url('img/pg17.jpg');}
+.page[data-page="18"]{background-image:url('img/pg18.jpg');}
+.page[data-page="19"]{background-image:url('img/pg19.jpg');}
+
+/* invisible clickable hit-zones over the buttons already drawn in the image */
+.hit{
+  position:absolute;
+  background:transparent;
+  border:none;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+
+/* check de regalo ya visto + regalo atenuado */
+.badge{
+  position:absolute;
+  width:7%;aspect-ratio:1;
+  background:#2e9b4e;color:#fff;
+  border:3px solid #fff;
+  border-radius:50%;
+  display:none;
+  align-items:center;justify-content:center;
+  font-size:2.4vw;font-weight:800;
+  box-shadow:0 6px 14px rgba(0,0,0,0.4);
+  pointer-events:none;
+  z-index:3;
+}
+#badgeLeft{left:24.5%;top:46.8%;}
+#badgeCenter{left:54.5%;top:31.8%;}
+#badgeRight{left:88.5%;top:46.8%;}
+.badge.show{display:flex;animation:badgePop 0.45s cubic-bezier(.3,1.6,.5,1);}
+@keyframes badgePop{from{transform:scale(0);}to{transform:scale(1);}}
+.gift.seen::after{
+  content:'';position:absolute;inset:0;
+  background:rgba(20,10,10,0.4);
+  border-radius:12px;
+  pointer-events:none;
+}
+
+/* pill buttons we add ourselves where the design has no button */
+.pill-btn{
+  font-family:'Sora',sans-serif;font-weight:700;font-size:2.2vw;
+  background:var(--maroon);color:#fff;border:none;border-radius:100px;
+  padding:1.6% 3.4%;cursor:pointer;
+  transition:transform 0.15s ease, background 0.2s ease;
+  box-shadow:0 8px 18px -8px rgba(0,0,0,0.4);
+}
+.pill-btn:hover{background:var(--maroon-dark);transform:translateY(-1px);}
+.pill-btn.small{position:absolute;font-size:1.7vw;padding:1.3% 2.6%;}
+.pill-btn.bottom-center{position:absolute;left:50%;bottom:4%;transform:translateX(-50%);}
+.pill-btn.bottom-center:hover{transform:translateX(-50%) translateY(-1px);}
+#toFinalBtn{position:absolute;left:50%;bottom:6%;transform:translateX(-50%);}
+#toFinalBtn:hover{transform:translateX(-50%) translateY(-1px);}
+
+.round-btn{
+  position:absolute;width:7%;aspect-ratio:1;border-radius:50%;
+  background:var(--maroon);color:#fff;border:none;cursor:pointer;
+  font-size:2.4vw;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 8px 18px -8px rgba(0,0,0,0.4);
+  transition:transform 0.15s ease, background 0.2s ease;
+}
+.round-btn:hover{background:var(--maroon-dark);transform:scale(1.06);}
+.round-btn.corner{right:4%;bottom:5%;}
+
+/* ===== P14 puzzle ===== */
+.puzzle-board{position:absolute;background:#000;border-radius:6px;overflow:hidden;box-shadow:0 14px 28px -14px rgba(0,0,0,0.5);}
+.tile{position:absolute;width:calc(100%/3 - 1.5px);height:calc(100%/3 - 1.5px);background-image:var(--couple-img);background-size:300% 300%;border-radius:3px;cursor:pointer;box-shadow:inset 0 0 0 1px rgba(255,255,255,0.35);transition:left 0.28s cubic-bezier(.4,0,.2,1), top 0.28s cubic-bezier(.4,0,.2,1);}
+.tile.selected{box-shadow:inset 0 0 0 3px #fff, 0 0 0 3px var(--maroon);z-index:2;transform:scale(0.96);}
+.tile.win-glow{box-shadow:none;border-radius:0;}
+.p-status{position:absolute;font-size:1.6vw;color:#3a2f28;font-weight:600;}
+.p-status.win{color:var(--maroon);}
+
+/* ===== P15 word search ===== */
+.ws-grid{position:absolute;display:grid;gap:1px;background:#8a2340;padding:4px;border-radius:6px;}
+.ws-cell{
+  background:#fdfaf3;display:flex;align-items:center;justify-content:center;
+  font-size:1.1vw;font-weight:700;cursor:pointer;border-radius:1px;user-select:none;
+}
+.ws-cell.sel{background:#f2c9d6;}
+.ws-cell.found{background:#93d19a;}
+.ws-words{position:absolute;display:flex;flex-wrap:wrap;gap:1%;font-size:1.3vw;font-weight:700;}
+.ws-words div{padding:0.6% 2%;border-radius:100px;background:#e9e2d266;color:#3a2f28;}
+.ws-words div.done{background:#93d19a;text-decoration:line-through;}
+
+/* ===== P16 vinyl ===== */
+.vinyl-spin{position:absolute;aspect-ratio:1;border-radius:50%;overflow:hidden;}
+.vinyl-spin img{width:100%;height:100%;animation:spin 4.5s linear infinite;display:block;}
+@keyframes spin{to{transform:rotate(360deg);}}
